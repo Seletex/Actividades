@@ -65,8 +65,8 @@ def admin_required(f):
 def index():
     usuario_actual = session.get('usuario')
     
-    # GET: Mostrar página
-    if request.method == 'GET':
+    # GET/HEAD: Mostrar página
+    if request.method in ['GET', 'HEAD']:
         if not usuario_actual:
             error_msg = ""
             if request.args.get('error'):
@@ -408,7 +408,7 @@ def exportar():
     usuario_actual = session.get('usuario')
     if not usuario_actual: return redirect(url_for('index'))
     
-    if request.method == 'GET':
+    if request.method in ['GET', 'HEAD']:
         stats = obtener_estadisticas_exportacion(usuario_actual)
         alertas = ""
         if request.args.get('error'):
