@@ -5,10 +5,6 @@ from config import logger, DB_FILE
 
 def init_db():
     """Inicializa la base de datos SQLite con las tablas necesarias"""
-    if os.path.exists(DB_FILE):
-        logger.info(f"La base de datos {DB_FILE} ya existe.")
-        return
-
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
 
@@ -20,6 +16,9 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         ''')
+        
+        # Asegurar usuario admin por defecto
+        cursor.execute("INSERT OR IGNORE INTO usuarios (username) VALUES ('admin')")
 
         # Tabla de Configuración de Usuario (JSON stores)
         cursor.execute('''
@@ -75,7 +74,7 @@ def init_db():
 
         conn.commit()
         logger.info("Base de datos SQLite inicializada correctamente.")
-        print(f"Base de datos {DB_NAME} creada con éxito.")
+        print(f"Base de datos {DB_FILE} creada con éxito.")
 
     except Exception as e:
         logger.error(f"Error inicializando base de datos: {e}")

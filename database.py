@@ -87,6 +87,13 @@ def inicializar_usuarios():
     # En Render, aseguramos que las tablas existan al inicio
     if DATABASE_URL:
         inicializar_tablas_postgres()
+    else:
+        # Para SQLite, usamos la lógica de database_setup
+        try:
+            from database_setup import init_db
+            init_db()
+        except Exception as e:
+            logger.error(f"Error inicializando SQLite: {e}")
 
 def inicializar_config():
     pass
